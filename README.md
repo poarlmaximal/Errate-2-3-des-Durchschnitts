@@ -18,7 +18,7 @@ Spieler müssen eine Zahl zwischen 0 und 1000 erraten. Der Gewinner ist derjenig
 
 ### Installation prüfen
 
-```cmd
+```bash
 # Node.js Version prüfen
 node --version
 
