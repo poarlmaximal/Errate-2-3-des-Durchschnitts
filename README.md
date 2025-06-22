@@ -6,26 +6,6 @@ Ein dezentrales Spiel basierend auf dem klassischen "Guess 2/3 of the Average" S
 
 Spieler müssen eine Zahl zwischen 0 und 1000 erraten. Der Gewinner ist derjenige, der am nächsten zu **2/3 des Durchschnitts** aller eingereichten Zahlen liegt. Das Spiel verwendet ein Commit-Reveal-Schema für faire und transparente Spielabläufe.
 
-## 🚀 Quick Start
-
-```bash
-# Repository klonen
-git clone https://github.com/poarlmaximal/Errate-2-3-des-Durchschnitts.git
-cd Errate-2-3-des-Durchschnitts
-
-# Abhängigkeiten installieren
-npm install
-
-# Hardhat Node starten
-npx hardhat node
-
-# Frontend starten (in neuem Terminal)
-cd scripts
-npx http-server
-```
-
-Öffne [http://127.0.0.1:8080](http://127.0.0.1:8080) in Chrome und spiele!
-
 ## 📋 Voraussetzungen
 
 ### Software-Requirements
@@ -38,7 +18,7 @@ npx http-server
 
 ### Installation prüfen
 
-```bash
+```cmd
 # Node.js Version prüfen
 node --version
 
