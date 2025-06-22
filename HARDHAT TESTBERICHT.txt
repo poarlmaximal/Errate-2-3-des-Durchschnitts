@@ -1,0 +1,72 @@
+C:\Users\poarlmaximal\Desktop\Errate-2-3-des-Durchschnitts>npx hardhat test
+Compiled 2 Solidity files successfully (evm target: paris).
+You're running a network fork starting from the latest block.
+Performance may degrade due to fetching data from the network with each run.
+If connecting to an archival node (e.g. Alchemy), we strongly recommend setting
+blockNumber to a fixed value to increase performance with a local cache.
+
+
+  Game
+    Deployment and Initial State
+      √ Should set correct game parameters
+      √ Should calculate deposit amount correctly
+      √ Should set correct phase timing
+      √ Should start in commit phase
+      √ Should have initial state values (368ms)
+      √ Should reject direct ether transfers
+    Commit Phase
+      √ Should allow valid commits (522ms)
+      √ Should reject commits with wrong amount
+      √ Should reject commits when max players reached (3335ms)
+      √ Should reject duplicate commits from same player (506ms)
+      √ Should reject commits outside commit phase
+    Reveal Phase
+      √ Should allow valid reveals (300ms)
+      √ Should reject reveals with wrong hash (93ms)
+      √ Should reject reveals with number out of range (1001ms)
+      √ Should reject reveals from non-committed players (88ms)
+      √ Should reject duplicate reveals (319ms)
+      √ Should reject reveals outside reveal phase
+    Finalization Phase
+      √ Should finalize game and determine winner correctly (196ms)
+      √ Should reject finalization before reveal phase ends (1130ms)
+      √ Should reject duplicate finalization (204ms)
+    Withdrawal and Pull Payments
+      √ Should allow withdrawal of balances (977ms)
+      √ Should reject withdrawal when no balance (281ms)
+    Phase Management
+      √ Should return correct current phase
+    Edge Cases and Security
+      √ Should handle boundary numbers (0 and 1000) (1909ms)
+
+  GameFactory
+    Deployment
+      √ Should set the right game master
+      √ Should start with zero games (100ms)
+    Game Creation
+      √ Should create a game with valid parameters (388ms)
+      √ Should create multiple games (498ms)
+      √ Should only allow game master to create games
+      √ Should validate game parameters through Game contract (192ms)
+    Game Instance Verification
+      √ Should create Game instances with correct parameters (538ms)
+    View Functions
+      √ Should return correct game count and list (576ms)
+
+  Integration Tests
+    Full Game Lifecycle
+      √ Should complete a full game from creation to payout (2730ms)
+      √ Should handle multiple concurrent games (1654ms)
+      √ Should handle game with minimum parameters (384ms)
+      √ Should handle game with maximum reasonable parameters (380ms)
+    Error Scenarios
+      √ Should handle game creation failures gracefully (340ms)
+      √ Should handle non-game master trying to create games (98ms)
+    Gas Optimization Tests
+Game creation gas: 1965115
+Commit gas: 133607
+Reveal gas: 92924
+      √ Should have reasonable gas costs for common operations (1169ms)
+
+
+  39 passing (47s)
