@@ -129,26 +129,10 @@ npx http-server
 3. **Zahl committen** - Geheime Zahl (0-1000) + Salt eingeben
 4. **Zahl revealen** - Nach der Commit-Phase dieselbe Zahl + Salt preisgeben
 5. **Gewinner ermitteln** - System berechnet 2/3 des Durchschnitts
-6. **Auszahlung** - Gewinner und Deposits abholen
+6. **Auszahlung** - Gewinne und Deposits abholen
 
  - `Spielanleitung.pdf` enthält eine ausführliche Bedienungsanleitung
 
-## 🏗️ Projektstruktur
-
-```
-Errate-2-3-des-Durchschnitts/
-├── contracts/              # Smart Contracts
-│   ├── GameFactory.sol     # Factory für Game-Erstellung
-│   └── Game.sol           # Haupt-Spiellogik
-├── scripts/               # Frontend & Konfiguration
-│   ├── index.html         # Haupt-Interface
-│   ├── app.js            # Frontend-Logik
-│   ├── config.js         # Contract-Adressen
-│   └── style.css         # Styling
-├── test/                 # Unit Tests
-├── hardhat.config.js     # Hardhat-Konfiguration
-└── package.json         # Abhängigkeiten
-```
 
 ## 🚨 Troubleshooting
 
@@ -183,8 +167,6 @@ Dieses Projekt steht unter der MIT-Lizenz. Siehe [LICENSE](LICENSE) für Details
 ## 🎉 Viel Spaß!
 
 Genieße das Spiel und experimentiere mit verschiedenen Strategien. Das Spiel zeigt interessante spieltheoretische Konzepte und Nash-Gleichgewichte in Aktion!
-
----
 
 **Entwickelt mit ❤️ für die Blockchain-Community**
 
