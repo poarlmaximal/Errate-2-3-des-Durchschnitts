@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Errate 2/3 des Durchschnitts</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <script src="config.js"></script>
+
+</head> 
+<body>
+    <div class="background-gradient"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="title">Errate 2/3 des Durchschnitts</h1>
+            <div class="wallet-section">
+                <button id="connectWallet" class="btn btn-primary">Wallet verbinden</button>
+                <div id="walletInfo" class="wallet-info hidden">
+                    <span id="walletAddress"></span>
+                    <button id="disconnectWallet" class="btn btn-secondary">Wallet trennen</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Rules Section -->
+        <section id="rulesSection" class="rules-section">
+			<div class="card">
+
+				<!-- H1 kommt bereits darüber im Header -->
+				<h2>Spielanleitung</h2>
+
+				<p>Willkommen bei <strong>Errate 2/3 des Durchschnitts</strong> – dem dezentralen Strategiespiel, bei dem du die
+					Gedanken der anderen lesen musst! Ziel ist es, eine Zahl zu wählen, die möglichst nah an
+					2/ 3 des Durchschnitts aller abgegebenen Zahlen liegt.<br><br></p>
+
+				<h3>Phasen im Überblick</h3>
+				<ol>
+					<li><strong>Commit&nbsp;Phase</strong><br>
+						• Wähle eine Zahl zwischen 0 und 1000 sowie einen geheimen Salt.<br>
+						• Zahle die Teilnahmegebühr plus einen Deposit (Sicherheits‑Pfand).<br>
+						• Deine Zahl bleibt geheim, weil nur ihr Hash on‑chain gespeichert wird.<br><br></li>
+					<li><strong>Reveal&nbsp;Phase</strong><br>
+						• Gib dieselbe Zahl und dein Salt preis.<br>
+						• Du erhältst deinen Deposit unmittelbar zurück (Pull‑Payment), falls die Hash‑Prüfung besteht.<br><br></li>
+					<li><strong>Finalisierung</strong><br>
+						• Haben mindestens 3 Spieler offenbart, berechnet der Smart Contract den Zielwert: Target = 2⁄3 × Durchschnitt aller offenbarten Zahlen.<br>
+						• Der Spieler mit dem geringsten Abstand zum Zielwert gewinnt den gesamten Pot (minus eine Service‑Fee).<br>
+						• Nicht aufgedeckte Deposits fließen automatisch in den Pot.<br><br></li>
+				</ol>
+
+				<h3>Warum ein Deposit?</h3>
+				<p>Das Pfand verhindert Griefing: Wer nicht offenbart, verliert sein Deposit. Dadurch lohnt es sich
+					nicht, das Spiel absichtlich zu sabotieren oder bis zum Schluss abzuwarten.<br><br></p>
+
+				<h3>FAQ</h3>
+				<dl class="faq">
+					<dt><strong>Wie hoch sollte ich meine Zahl wählen?</strong></dt>
+					<dd>Denke daran, dass alle versuchen, 2/3 des Durchschnitts zu treffen. In klassischen Studien
+						pendelt sich der Gleichgewichtswert bei&nbsp;≈ 0 ein – aber nur, wenn alle perfekt
+						rational denken. In kleinen Runden liegen reale Gewinner oft zwischen 100 und 400.<br><br></dd>
+
+					<dt><strong>Was ist ein Salt?</strong></dt>
+					<dd>Ein zufälliger Zusatz‑String, der zusammen mit deiner Zahl gehasht wird. Er macht es praktisch
+						unmöglich, deine Zahl aus dem Hash zu erraten. Beispiel-Salt: "Mein-geheimer-Salt#42!".<br><br></dd>
+
+					<dt><strong>Kann ich mehrere Accounts benutzen?</strong></dt>
+					<dd>Technisch ja, aber nicht erlaubt. Mehrfach‑Teilnahme verzerrt das Spiel und führt ggf. zum
+						Ausschluss.<br><br></dd>
+
+					<dt><strong>Was passiert, wenn weniger als 3 Spieler revealen?</strong></dt>
+					<dd>Der Contract bricht ab und erstattet allen ihr Geld (Teilnahmegebühr + Deposit).<br><br></dd>
+
+					<dt><strong>Wann darf ich withdraw klicken?</strong></dt>
+					<dd>Nach einem erfolgreichen Reveal sofort für deinen Deposit – und nach der Finalisierung zusätzlich
+						für deinen Gewinn, falls du der Sieger bist.</dd>
+				</dl>
+			</div>
+</section>
+
+
+        <!-- Games List Section -->
+        <section id="gamesSection" class="games-section hidden">
+            <div class="section-header">
+                <h2>Verfügbare Spiele</h2>
+                <div class="header-actions">
+					<!-- Wird nur dem Game-Master angezeigt -->
+					<button id="createGameBtn" class="btn btn-primary hidden">Neues Spiel</button>
+					<button id="refreshGames" class="btn btn-secondary">Aktualisieren</button>
+				</div>
+            </div>
+            
+            <div id="gamesList" class="games-list">
+                <!-- Games will be populated dynamically -->
+            </div>
+        </section>
+
+        <!-- Game Interaction Modal -->
+        <div id="gameModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Spiel Details</h3>
+                    <button id="closeModal" class="close-btn">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div id="gameDetails" class="game-details">
+                        <!-- Game details will be populated -->
+                    </div>
+                    
+                    <!-- Commit Section -->
+                    <div id="commitSection" class="action-section">
+                        <h4>Zahl einreichen (Commit)</h4>
+                        <div class="input-group">
+                            <label for="numberInput">Deine Zahl (0-1000):</label>
+                            <input type="number" id="numberInput" min="0" max="1000" placeholder="z.B. 333">
+                        </div>
+                        <div class="input-group">
+                            <label for="saltInput">Salt (beliebiger Text):</label>
+                            <input type="text" id="saltInput" placeholder="z.B. meinGeheimnisSalt123">
+                        </div>
+                        <button id="commitBtn" class="btn btn-primary">Commit senden</button>
+                    </div>
+                    
+                    <!-- Reveal Section -->
+                    <div id="revealSection" class="action-section">
+                        <h4>Zahl preisgeben (Reveal)</h4>
+                        <div class="input-group">
+                            <label for="revealNumberInput">Deine Zahl:</label>
+                            <input type="number" id="revealNumberInput" min="0" max="1000">
+                        </div>
+                        <div class="input-group">
+                            <label for="revealSaltInput">Dein Salt:</label>
+                            <input type="text" id="revealSaltInput">
+                        </div>
+                        <button id="revealBtn" class="btn btn-primary">Reveal senden</button>
+                    </div>
+                    
+                    <!-- Finalize Section -->
+                    <div id="finalizeSection" class="action-section">
+                        <h4>Spiel beenden</h4>
+                        <p>Die Reveal-Phase ist beendet. Das Spiel kann jetzt finalisiert werden.</p>
+                        <button id="finalizeBtn" class="btn btn-primary">Spiel finalisieren</button>
+                    </div>
+                    
+                    <!-- Withdraw Section -->
+                    <div id="withdrawSection" class="action-section">
+                        <h4>Guthaben abheben</h4>
+                        <p id="balanceInfo">Verfügbares Guthaben: <span id="userBalance">0</span> ETH</p>
+                        <button id="withdrawBtn" class="btn btn-success">Guthaben abheben</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+		<!-- Modal: Spiel anlegen -->
+		<div id="createGameModal" class="modal hidden">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Neues Spiel anlegen</h3>
+					<button id="closeCreateModal" class="close-btn">&times;</button>
+				</div>
+
+				<div class="modal-body">
+
+					<div class="form-row single">
+						<label for="entryFeeInput">Teilnahmegebühr (ETH):</label>
+						<input type="number" id="entryFeeInput" min="0.001" step="0.001" placeholder="10">
+						
+					</div>
+
+					<div class="form-row single">
+						<label for="serviceFeeInput">Service-Gebühr (%):</label>
+						<input type="number" id="serviceFeeInput" min="1" max="100" placeholder="10">
+					</div>
+
+					<div class="form-row single">
+						<label for="depositPercentInput">Deposit (%):</label>
+						<input type="number" id="depositPercentInput" min="1" max="100" step="1" placeholder="50">
+					</div>
+
+					<div class="form-row single">
+						<label for="commitBlocksInput">Commit-Phase (Blöcke):</label>
+						<input type="number" id="commitBlocksInput" min="10" step="1" placeholder="50">
+					</div>
+
+					<div class="form-row single">
+						<label for="revealBlocksInput">Reveal-Phase (Blöcke):</label>
+						<input type="number" id="revealBlocksInput" min="10" step="1" placeholder="50">
+					</div>
+
+					<div class="form-row single">
+						<label for="maxPlayersInput">Maximale Spielerzahl:</label>
+						<input type="number" id="maxPlayersInput" min="3" step="1" placeholder="20">
+					</div>
+
+					<button id="confirmCreateBtn" class="btn btn-primary submit-btn">Spiel erstellen</button>
+				</div>
+			</div>
+		</div>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay hidden">
+            <div class="loading-spinner"></div>
+            <p>Transaktion wird verarbeitet...</p>
+        </div>
+
+        <!-- Notification -->
+        <div id="notification" class="notification hidden">
+            <span id="notificationText"></span>
+            <button id="closeNotification" class="close-btn">&times;</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
