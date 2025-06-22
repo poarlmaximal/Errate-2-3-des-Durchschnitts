@@ -69,7 +69,7 @@ npm install
 ### 4. 🦊 MetaMask Setup
 
 #### Extension installieren
-- [MetaMask Chrome Extension](https://chrome.google.com/webstore/detail/metamask/) installieren
+- [MetaMask Chrome Extension](https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn) installieren
 - Account erstellen oder anmelden
 
 #### Netzwerk konfigurieren
