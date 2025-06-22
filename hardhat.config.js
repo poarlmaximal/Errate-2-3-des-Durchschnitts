@@ -8,7 +8,7 @@ module.exports = {
   networks: {
     hardhat:{
       forking:{
-        url: "https://eth-sepolia.g.alchemy.com/v2/jx62LaFABcginbnw02vlhMXR_g9fIJs6",
+        url: "https://eth-sepolia.g.alchemy.com/v2/************** INSERT YOUR KEY **************",
       },
       mining: {
         auto: true,
