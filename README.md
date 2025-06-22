@@ -122,7 +122,7 @@ npx http-server
 # Öffne http://127.0.0.1:8080 in Chrome
 ```
 
-## 🎮 Spielanleitung
+## 🎮 Spielanleitung (kurz)
 
 1. **Wallet verbinden** - MetaMask mit der Anwendung verbinden
 2. **Spiel auswählen** - Aus verfügbaren Spielen wählen oder neues erstellen
@@ -130,6 +130,8 @@ npx http-server
 4. **Zahl revealen** - Nach der Commit-Phase dieselbe Zahl + Salt preisgeben
 5. **Gewinner ermitteln** - System berechnet 2/3 des Durchschnitts
 6. **Auszahlung** - Gewinner und Deposits abholen
+
+ - `Spielanleitung.pdf` enthält eine ausführliche Bedienungsanleitung
 
 ## 🏗️ Projektstruktur
 
@@ -147,40 +149,6 @@ Errate-2-3-des-Durchschnitts/
 ├── hardhat.config.js     # Hardhat-Konfiguration
 └── package.json         # Abhängigkeiten
 ```
-
-## 🔒 Sicherheitsfeatures
-
-- **Commit-Reveal-Schema**: Verhindert Frontrunning
-- **Anti-Grief-Deposits**: Schutz vor unehrlichen Spielern
-- **Pull-Payment-Pattern**: Sichere Auszahlungen
-- **Reentrancy-Schutz**: Schutz vor Reentrancy-Attacken
-
-## 🛠️ Entwicklung
-
-```bash
-# Tests ausführen
-npm test
-
-# Contracts kompilieren
-npx hardhat compile
-
-# Lokales Netzwerk starten
-npx hardhat node
-
-# Contract-Größe prüfen
-npx hardhat size-contracts
-```
-
-## 📊 Game-Parameter
-
-| Parameter | Beschreibung | Konfigurierbar |
-|-----------|-------------|----------------|
-| Entry Fee | Einsatz pro Spieler | ✅ |
-| Service Fee | Gebühr für GameMaster | ✅ |
-| Deposit | Anti-Grief-Kaution | ✅ |
-| Commit Phase | Dauer der Commit-Phase | ✅ |
-| Reveal Phase | Dauer der Reveal-Phase | ✅ |
-| Max Players | Maximale Spieleranzahl | ✅ |
 
 ## 🚨 Troubleshooting
 
